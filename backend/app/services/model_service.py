@@ -5,6 +5,7 @@
 # ============================================================
 
 import os
+import shutil
 import subprocess
 from typing import Dict, Optional, Tuple
 from app.config import PMML_PATH
@@ -18,22 +19,36 @@ _java_version = None
 
 def _detectar_java() -> Tuple[bool, Optional[str], Optional[str]]:
     """
-    Intenta detectar Java en el sistema.
-    Prueba JDK 21 primero, luego JDK 26, luego JAVA_HOME genérico.
+    Detecta Java en el sistema de forma cross-platform (Linux / macOS / Windows).
+    Orden de búsqueda:
+      1. JAVA_HOME/bin/java
+      2. 'java' en PATH (shutil.which)
+      3. Rutas conocidas de Windows (fallback local)
     Retorna: (encontrado, ruta_java, version_string)
     """
-    candidatos = [
-        r"C:\Program Files\Java\jdk-21.0.11\bin\java.exe",
-        r"C:\Program Files\Java\jdk-26.0.1\bin\java.exe",
-    ]
-    
-    # También probar con JAVA_HOME si está seteado
+    candidatos: list[str] = []
+
+    # 1. JAVA_HOME (prioridad más alta)
     java_home = os.environ.get("JAVA_HOME")
     if java_home:
-        candidatos.insert(0, os.path.join(java_home, "bin", "java.exe"))
-    
+        candidatos.append(os.path.join(java_home, "bin", "java"))
+        candidatos.append(os.path.join(java_home, "bin", "java.exe"))
+
+    # 2. Sistema PATH
+    java_from_path = shutil.which("java")
+    if java_from_path:
+        candidatos.append(java_from_path)
+
+    # 3. Fallbacks Windows locales (desarrollo local)
+    candidatos.extend([
+        r"C:\Program Files\Java\jdk-21.0.11\bin\java.exe",
+        r"C:\Program Files\Java\jdk-26.0.1\bin\java.exe",
+        r"C:\Program Files\Java\jdk-21\bin\java.exe",
+        r"C:\Program Files\Eclipse Adoptium\jdk-21.0.11.9-hotspot\bin\java.exe",
+    ])
+
     for java_exe in candidatos:
-        if os.path.exists(java_exe):
+        if java_exe and os.path.exists(java_exe):
             try:
                 result = subprocess.run(
                     [java_exe, "-version"],
@@ -48,19 +63,27 @@ def _detectar_java() -> Tuple[bool, Optional[str], Optional[str]]:
             except Exception as e:
                 logger.warning(f"Java encontrado en {java_exe} pero no responde: {e}")
                 continue
-    
+
     logger.error("No se detectó Java en ninguna ubicación conocida")
     return False, None, None
 
 def _configurar_java_para_pypmml(java_exe: str):
     """
     Configura las variables de entorno necesarias para que pypmml encuentre Java.
+    Respeta JAVA_HOME si ya está definido (por ejemplo, en Docker/Render).
     """
     java_bin = os.path.dirname(java_exe)
-    java_home = os.path.dirname(java_bin)
-    os.environ["JAVA_HOME"] = java_home
+
+    # Solo inferir JAVA_HOME si no viene del entorno (evita rutas incorrectas en Linux)
+    if not os.environ.get("JAVA_HOME"):
+        java_home = os.path.dirname(java_bin)
+        os.environ["JAVA_HOME"] = java_home
+        logger.info(f"JAVA_HOME inferido y configurado a: {java_home}")
+    else:
+        logger.info(f"JAVA_HOME ya está configurado: {os.environ['JAVA_HOME']}")
+
     os.environ["PATH"] = java_bin + os.pathsep + os.environ.get("PATH", "")
-    logger.info(f"JAVA_HOME configurado a: {java_home}")
+    logger.info(f"Java bin añadido al PATH: {java_bin}")
 
 def cargar_modelo() -> Tuple[bool, str]:
     """

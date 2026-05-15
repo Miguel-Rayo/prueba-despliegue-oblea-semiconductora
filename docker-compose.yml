@@ -1,0 +1,18 @@
+# ============================================================
+# Docker Compose — Prueba local antes de subir a Render
+# ============================================================
+# Uso:
+#   docker compose up --build
+#   Abre http://localhost:8000
+# ============================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1

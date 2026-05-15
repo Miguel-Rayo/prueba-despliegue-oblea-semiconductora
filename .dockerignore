@@ -1,0 +1,41 @@
+# ============================================================
+# .dockerignore — SWAL Semiconductors
+# Evita incluir archivos innecesarios / pesados en la imagen Docker
+# ============================================================
+
+# Git
+.git/
+.gitignore
+
+# Python — entornos y caché
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.coverage
+*.egg-info/
+dist/
+build/
+
+# Logs locales (se regeneran dentro del contenedor)
+*.log
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Render / CI (no necesarios en la imagen)
+render.yaml
+
+# Archivos de documentación grandes (opcional)
+# *.md

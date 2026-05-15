@@ -1,0 +1,23 @@
+# ============================================================
+# Render Blueprint
+# Define la infraestructura como código para Render.com
+# ============================================================
+# Uso:
+#   1. Sube este archivo a tu repo.
+#   2. En Render, crea un "Blueprint" y selecciona este repo.
+#   3. Render creará automáticamente el Web Service.
+# ============================================================
+
+services:
+  - type: web
+    name: swal-semiconductors
+    runtime: docker
+    plan: free
+    branch: main
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      # Render inyecta PORT automáticamente; no hace falta definirlo aquí.
