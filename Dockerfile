@@ -61,7 +61,7 @@ WORKDIR /app/backend
 # ------------------------------------------------------------------
 # Render usa esto para saber si el contenedor está sano.
 # start-period=60s da tiempo a que la JVM cargue el modelo PMML (~16 MB).
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')" || exit 1
 
 # ------------------------------------------------------------------

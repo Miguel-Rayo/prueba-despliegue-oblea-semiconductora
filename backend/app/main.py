@@ -68,18 +68,18 @@ def create_app() -> FastAPI:
         app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
     else:
         logger.warning(f"Frontend no encontrado en {FRONTEND_DIR}. Solo API disponible.")
-    
-    # Evento de startup: cargar modelo
-    @app.on_event("startup")
-    async def startup_event():
-        logger.info("EVENTO STARTUP: Cargando modelo PMML...")
-        ok, msg = cargar_modelo()
-        if ok:
-            logger.info(f"STARTUP EXITOSO: {msg}")
-        else:
-            logger.error(f"STARTUP CON ADVERTENCIA: {msg}")
-            logger.error("El endpoint /predecir NO estará disponible hasta que se resuelva el problema con Java/PMML.")
-    
+
+    # Precarga síncrona del modelo ANTES de exponer la app al mundo.
+    # Esto evita que Render reciba "modelo no cargado" durante healthchecks
+    # tempranos o peticiones iniciales tras un cold start.
+    logger.info("PRECARGA SINCRONA: Cargando modelo PMML...")
+    ok, msg = cargar_modelo()
+    if ok:
+        logger.info(f"PRECARGA EXITOSA: {msg}")
+    else:
+        logger.error(f"PRECARGA FALLIDA: {msg}")
+        logger.error("El endpoint /predecir NO estará disponible hasta que se resuelva el problema con Java/PMML.")
+
     return app
 
 app = create_app()

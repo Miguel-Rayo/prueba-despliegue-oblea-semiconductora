@@ -280,5 +280,30 @@ const UI = {
         `;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 5000);
+    },
+
+    mostrarInfoGlobal(mensaje, duracionMs = 5000) {
+        const existing = document.querySelector('.toast-info');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-info';
+        toast.textContent = mensaje;
+        toast.style.cssText = `
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: #fff; padding: 1rem 2rem;
+            border-radius: var(--radius-md); font-weight: 600; z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,180,216,0.3); animation: fadeInUp 0.3s ease;
+        `;
+        document.body.appendChild(toast);
+        if (duracionMs > 0) {
+            setTimeout(() => toast.remove(), duracionMs);
+        }
+        return toast;
+    },
+
+    ocultarInfoGlobal() {
+        const existing = document.querySelector('.toast-info');
+        if (existing) existing.remove();
     }
 };

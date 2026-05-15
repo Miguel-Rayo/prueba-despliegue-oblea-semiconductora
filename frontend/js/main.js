@@ -106,13 +106,22 @@ async function handlePrediccion() {
     UI.hideResults();
     WaferViz.setAnalizando();
 
+    // Feedback temprano si el servidor está en cold start (Render Free)
+    let wakingToastTimer = setTimeout(() => {
+        UI.mostrarInfoGlobal('El servidor está despertando, reintentando conexión...', 0);
+    }, 2500);
+
     try {
         const resultado = await enviarPrediccion(datos);
+        clearTimeout(wakingToastTimer);
+        UI.ocultarInfoGlobal();
         console.log('Resultado:', resultado);
 
         WaferViz[resultado.es_defectuosa ? 'setDefectuosa' : 'setNormal'](resultado.probabilidad);
         UI.showResults(resultado);
     } catch (e) {
+        clearTimeout(wakingToastTimer);
+        UI.ocultarInfoGlobal();
         console.error('Error en predicción:', e);
         UI.mostrarErrorGlobal(`Error: ${e.message}`);
         WaferViz.reset();
