@@ -1,0 +1,103 @@
+/* ============================================================
+   WAFER VISUALIZATION (Real Images)
+   ============================================================ */
+
+.wafer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    gap: 1.2rem;
+}
+
+.wafer-image-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.wafer-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    display: block;
+}
+
+/* Marco luminoso alrededor de la imagen */
+.wafer-img-frame {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+    transition: box-shadow 0.5s ease;
+    box-shadow: inset 0 0 0 1px var(--border-subtle),
+                0 0 0 0 transparent;
+}
+
+/* Estados de la oblea */
+.wafer-image-wrap.state-normal .wafer-img-frame {
+    box-shadow: inset 0 0 0 1px rgba(46,196,182,0.4),
+                0 0 40px rgba(46,196,182,0.15);
+}
+.wafer-image-wrap.state-normal .wafer-img {
+    transform: scale(1.02);
+}
+
+.wafer-image-wrap.state-defect-light .wafer-img-frame {
+    box-shadow: inset 0 0 0 1px rgba(255,165,0,0.5),
+                0 0 40px rgba(255,165,0,0.15);
+}
+.wafer-image-wrap.state-defect-medium .wafer-img-frame {
+    box-shadow: inset 0 0 0 1px rgba(255,100,50,0.5),
+                0 0 50px rgba(255,100,50,0.2);
+}
+.wafer-image-wrap.state-defect-critical .wafer-img-frame {
+    box-shadow: inset 0 0 0 1px rgba(255,0,85,0.6),
+                0 0 60px rgba(255,0,85,0.25);
+    animation: pulse-wafer-glow 2s ease-in-out infinite;
+}
+.wafer-image-wrap.state-defect-critical .wafer-img {
+    filter: contrast(1.05) saturate(1.1);
+}
+
+@keyframes pulse-wafer-glow {
+    0%, 100% { box-shadow: inset 0 0 0 1px rgba(255,0,85,0.6), 0 0 60px rgba(255,0,85,0.25); }
+    50%      { box-shadow: inset 0 0 0 1px rgba(255,0,85,0.8), 0 0 80px rgba(255,0,85,0.35); }
+}
+
+.wafer-status-text {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.4s ease;
+    text-align: center;
+}
+
+.wafer-status-text.state-normal   { color: var(--success); text-shadow: 0 0 12px rgba(46,196,182,0.3); }
+.wafer-status-text.state-defect   { color: var(--alert-laser); text-shadow: 0 0 12px rgba(255,0,85,0.3); }
+
+.wafer-legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWAL Semiconductors — Predicción de Defectos en Obleas</title>
+    <meta name="description" content="Web service de minería de datos para predicción de defectos en obleas semiconductoras mediante fotolitografía">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/wafer.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Canvas de partículas sutiles -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Navegación minimalista -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="brand-icon">◈</span>
+            <span class="brand-text">SWAL</span>
+        </div>
+        <div class="nav-links">
+            <a href="#hero">Inicio</a>
+            <a href="#process">Proceso</a>
+            <a href="#lab">Laboratorio</a>
+            <a href="#metrics">Métricas</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Minería de Datos — NRC 83509
+            </div>
+            <h1 class="hero-title">
+                La precisión<br>
+                <span class="gradient-text">detrás del silicio</span>
+            </h1>
+            <p class="hero-subtitle">
+                Un modelo de <strong>Random Forest</strong> entrenado con ~7,500 registros
+                predice defectos en obleas semiconductoras antes de que ocurran.
+                <br><br>
+                <em>Fotolitografía, física y matemáticas al servicio de la ciencia de materiales.</em>
+            </p>
+            <div class="hero-cta">
+                <a href="#lab" class="btn btn-primary">
+                    <span>Ir al Laboratorio</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#process" class="btn btn-ghost">Conocer el Proceso</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-image-wrap">
+                <img src="assets/general/oblea-circuitos-internos.jpg"
+                     alt="Oblea de silicio con circuitos integrados visibles"
+                     class="hero-image">
+                <div class="hero-image-frame"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIDÁCTICA: ETAPAS DEL PROCESO -->
+    <section id="process" class="process-section">
+        <div class="section-header">
+            <span class="section-tag">01 — Proceso de Fabricación</span>
+            <h2 class="section-title">Del silicio puro<br>al <span class="gradient-text">chip funcional</span></h2>
+            <p class="section-desc">
+                Cada oblea atraviesa cientos de etapas controladas. Nuestro modelo monitorea
+                los parámetros críticos de cada una para detectar anomalías antes de que sean irreversibles.
+            </p>
+        </div>
+        <div class="process-cards">
+            <article class="process-card" data-step="Deposition">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M24 4v40M4 24h40M12 12l24 24M12 36l24-24"/></svg>
+                </div>
+                <h3>Deposición</h3>
+                <p>Adición de capas delgadas mediante CVD o PVD. Control preciso de temperatura y flujo de gas para uniformidad.</p>
+                <span class="card-fact">Temperatura crítica: ~450°C</span>
+            </article>
+            <article class="process-card" data-step="Lithography">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="18"/><path d="M24 6v36M6 24h36"/></svg>
+                </div>
+                <h3>Litografía</h3>
+                <p>Transferencia de patrones con luz ultravioleta y fotoresinas. La resolución depende de la estabilidad térmica.</p>
+                <span class="card-fact">Longitud de onda UV: 193 nm</span>
+            </article>
+            <article class="process-card" data-step="Etching">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 40l16-32 16 32H8z"/><path d="M16 28h16"/></svg>
+                </div>
+                <h3>Grabado</h3>
+                <p>Remoción selectiva de material para crear estructuras del circuito. La tasa de grabado es señal de alarma directa.</p>
+                <span class="card-fact">Tasa nominal: ~95 nm/min</span>
+            </article>
+            <article class="process-card" data-step="Oxidation">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="14"/><circle cx="24" cy="24" r="6"/></svg>
+                </div>
+                <h3>Oxidación</h3>
+                <p>Formación de capas de SiO₂ para aislamiento eléctrico. La temperatura es el parámetro dominante.</p>
+                <span class="card-fact">Temperatura típica: >900°C</span>
+            </article>
+            <article class="process-card" data-step="CMP">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="32" height="32" rx="4"/><path d="M8 24h32M24 8v32"/></svg>
+                </div>
+                <h3>CMP</h3>
+                <p>Planarización químico-mecánica. La presión aplicada y la corriente del equipo determinan la calidad superficial.</p>
+                <span class="card-fact">Presión controlada: ~760 Torr</span>
+            </article>
+        </div>
+    </section>
+
+    <!-- LABORATORIO DE PREDICCIÓN -->
+    <section id="lab" class="lab-section">
+        <div class="section-header">
+            <span class="section-tag">02 — Laboratorio de Predicción</span>
+            <h2 class="section-title">Panel de Control<br><span class="gradient-text">Cleanroom</span></h2>
+            <p class="section-desc">
+                Ingrese los parámetros de proceso de una oblea. El modelo evaluará si sus características
+                exceden los límites del comportamiento normal aprendido durante el entrenamiento.
+            </p>
+        </div>
+
+        <div class="lab-grid">
+            <!-- Panel de Formulario -->
+            <div class="lab-panel form-panel">
+                <div class="panel-header">
+                    <span class="panel-status" id="system-status">● Sistema Listo</span>
+                    <span class="panel-id">WS-001</span>
+                </div>
+
+                <form id="prediction-form" class="prediction-form" novalidate>
+                    <div class="form-group">
+                        <label for="temperature_c">Temperatura <span class="unit">°C</span></label>
+                        <div class="input-wrap">
+                            <input type="number" id="temperature_c" name="temperature_c" step="0.1" value="450.0" required>
+                            <input type="range" id="temperature_c_range" min="380" max="520" step="0.1" value="450.0">
+                        </div>
+                        <span class="input-hint">Rango: 380 — 520 | Típico: 450</span>
+                        <span class="input-error" id="error-temperature_c"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pressure_torr">Presión <span class="unit">Torr</span></label>
+                        <div class="input-wrap">
+                            <input type="number" id="pressure_torr" name="pressure_torr" step="0.1" value="760.0" required>
+                            <input type="range" id="pressure_torr_range" min="600" max="900" step="0.1" value="760.0">
+                        </div>
+                        <span class="input-hint">Rango: 600 — 900 | Típico: 760</span>
+                        <span class="input-error" id="error-pressure_torr"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gas_flow_sccm">Flujo de Gas <span class="unit">sccm</span></label>
+                        <div class="input-wrap">
+                            <input type="number" id="gas_flow_sccm" name="gas_flow_sccm" step="0.1" value="120.0" required>
+                            <input type="range" id="gas_flow_sccm_range" min="80" max="160" step="0.1" value="120.0">
+                        </div>
+                        <span class="input-hint">Rango: 80 — 160 | Típico: 115</span>
+                        <span class="input-error" id="error-gas_flow_sccm"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="etch_rate_nm_min">Tasa de Grabado <span class="unit">nm/min</span></label>
+                        <div class="input-wrap">
+                            <input type="number" id="etch_rate_nm_min" name="etch_rate_nm_min" step="0.1" value="95.0" required>
+                            <input type="range" id="etch_rate_nm_min_range" min="60" max="130" step="0.1" value="95.0">
+                        </div>
+                        <span class="input-hint">Rango: 60 — 130 | Típico: 95</span>
+                        <span class="input-error" id="error-etch_rate_nm_min"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="voltage_v">Voltaje <span class="unit">V</span></label>
+                            <div class="input-wrap">
+                                <input type="number" id="voltage_v" name="voltage_v" step="0.1" value="5.0" required>
+                                <input type="range" id="voltage_v_range" min="3.5" max="6.5" step="0.1" value="5.0">
+                            </div>
+                            <span class="input-hint">3.5 — 6.5 V</span>
+                            <span class="input-error" id="error-voltage_v"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="current_ma">Corriente <span class="unit">mA</span></label>
+                            <div class="input-wrap">
+                                <input type="number" id="current_ma" name="current_ma" step="0.1" value="20.0" required>
+                                <input type="range" id="current_ma_range" min="12" max="28" step="0.1" value="20.0">
+                            </div>
+                            <span class="input-hint">12 — 28 mA</span>
+                            <span class="input-error" id="error-current_ma"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Etapa del Proceso</label>
+                        <div class="step-selector" id="step-selector">
+                            <button type="button" class="step-chip" data-value="CMP">CMP</button>
+                            <button type="button" class="step-chip active" data-value="Deposition">Deposición</button>
+                            <button type="button" class="step-chip" data-value="Etching">Grabado</button>
+                            <button type="button" class="step-chip" data-value="Lithography">Litografía</button>
+                            <button type="button" class="step-chip" data-value="Oxidation">Oxidación</button>
+                        </div>
+                        <input type="hidden" id="process_step" name="process_step" value="Deposition">
+                        <span class="input-error" id="error-process_step"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-launch" id="btn-launch">
+                        <span class="btn-text">Ejecutar Predicción</span>
+                        <span class="btn-loader" hidden>
+                            <svg class="spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+                            Analizando...
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Panel de Visualización de Oblea -->
+            <div class="lab-panel viz-panel">
+                <div class="wafer-container" id="wafer-container">
+                    <div class="wafer-image-wrap">
+                        <img id="wafer-img"
+                             src="assets/variaciones-oblea/oblea-perfecta.png"
+                             alt="Estado de la oblea"
+                             class="wafer-img">
+                        <div class="wafer-img-frame" id="wafer-img-frame"></div>
+                    </div>
+                    <div class="wafer-status-text" id="wafer-status-text">ESPERANDO PARÁMETROS</div>
+                </div>
+                <div class="wafer-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:#2ec4b6"></span>
+                        Normal
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:#ff0055"></span>
+                        Defectuosa
+                    </div>
+                </div>
+
+                <!-- Flujo de Proceso — llena el espacio vertical vacío -->
+                <div class="process-flow" id="process-flow">
+                    <h5 class="process-flow-title">Secuencia de Fabricación</h5>
+                    <div class="process-flow-timeline">
+                        <div class="flow-step" data-step="CMP">
+                            <div class="flow-marker"></div>
+                            <div class="flow-body">
+                                <span class="flow-name">CMP</span>
+                                <span class="flow-desc">Planarización</span>
+                            </div>
+                        </div>
+                        <div class="flow-step" data-step="Deposition">
+                            <div class="flow-marker"></div>
+                            <div class="flow-body">
+                                <span class="flow-name">Deposición</span>
+                                <span class="flow-desc">CVD / PVD</span>
+                            </div>
+                        </div>
+                        <div class="flow-step" data-step="Lithography">
+                            <div class="flow-marker"></div>
+                            <div class="flow-body">
+                                <span class="flow-name">Litografía</span>
+                                <span class="flow-desc">Patrones UV</span>
+                            </div>
+                        </div>
+                        <div class="flow-step" data-step="Etching">
+                            <div class="flow-marker"></div>
+                            <div class="flow-body">
+                                <span class="flow-name">Grabado</span>
+                                <span class="flow-desc">Plasma / Wet</span>
+                            </div>
+                        </div>
+                        <div class="flow-step" data-step="Oxidation">
+                            <div class="flow-marker"></div>
+                            <div class="flow-body">
+                                <span class="flow-name">Oxidación</span>
+                                <span class="flow-desc">Capa SiO₂</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados — Dashboard Premium (inicialmente ocultos) -->
+        <div id="results-panel" class="results-panel" hidden>
+            <!-- Header de Resultado -->
+            <div class="dash-header" id="dash-header">
+                <div class="dash-header-icon" id="dash-header-icon">✓</div>
+                <div class="dash-header-body">
+                    <span class="dash-header-badge" id="badge-label">NORMAL</span>
+                    <span class="dash-header-confidence" id="badge-confidence">99.8% confianza del modelo</span>
+                </div>
+            </div>
+
+            <!-- Grid Principal -->
+            <div class="dash-grid">
+                <!-- Probabilidades Circulares -->
+                <div class="dash-card">
+                    <h4 class="dash-card-title">Probabilidades</h4>
+                    <div class="dash-probs">
+                        <div class="dash-prob-item">
+                            <div class="dash-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-input)" stroke-width="8"/>
+                                    <circle id="ring-normal" cx="50" cy="50" r="42" fill="none" stroke="var(--success)" stroke-width="8"
+                                            stroke-dasharray="263.9" stroke-dashoffset="263.9" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="dash-ring-value" id="ring-normal-value">0%</span>
+                            </div>
+                            <span class="dash-ring-label">Normal</span>
+                        </div>
+                        <div class="dash-prob-item">
+                            <div class="dash-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-input)" stroke-width="8"/>
+                                    <circle id="ring-defect" cx="50" cy="50" r="42" fill="none" stroke="var(--alert-laser)" stroke-width="8"
+                                            stroke-dasharray="263.9" stroke-dashoffset="263.9" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="dash-ring-value" id="ring-defect-value">0%</span>
+                            </div>
+                            <span class="dash-ring-label">Defectuosa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Z-Scores — Barras de Audio -->
+                <div class="dash-card wide">
+                    <h4 class="dash-card-title">Desviación por Variable <span class="dash-subtitle">(Z-Score)</span></h4>
+                    <div class="dash-zscore-grid" id="zscore-list">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Diagnóstico Terminal -->
+                <div class="dash-card wide">
+                    <h4 class="dash-card-title">Diagnóstico del Modelo</h4>
+                    <div class="dash-terminal" id="feedback-text">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÉTRICAS DEL MODELO -->
+    <section id="metrics" class="metrics-section">
+        <div class="section-header">
+            <span class="section-tag">03 — Rendimiento del Modelo</span>
+            <h2 class="section-title">Métricas de<br><span class="gradient-text">Validación</span></h2>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#1a1a2e" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#9d4edd" stroke-width="8" stroke-dasharray="263.9" stroke-dashoffset="1.1" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                    </svg>
+                    <span class="metric-value">99.6<span>%</span></span>
+                </div>
+                <span class="metric-name">Accuracy</span>
+                <span class="metric-desc">Exactitud global</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#1a1a2e" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#00b4d8" stroke-width="8" stroke-dasharray="263.9" stroke-dashoffset="2.6" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                    </svg>
+                    <span class="metric-value">99.0<span>%</span></span>
+                </div>
+                <span class="metric-name">Precisión</span>
+                <span class="metric-desc">De los detectados, cuántos son reales</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#1a1a2e" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#2ec4b6" stroke-width="8" stroke-dasharray="263.9" stroke-dashoffset="0.5" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                    </svg>
+                    <span class="metric-value">99.8<span>%</span></span>
+                </div>
+                <span class="metric-name">Sensibilidad</span>
+                <span class="metric-desc">De los defectos, cuántos detectamos</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#1a1a2e" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#c77dff" stroke-width="8" stroke-dasharray="263.9" stroke-dashoffset="1.6" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                    </svg>
+                    <span class="metric-value">99.4<span>%</span></span>
+                </div>
+                <span class="metric-name">F1-Score</span>
+                <span class="metric-desc">Balance precisión-sensibilidad</span>
+            </div>
+            <div class="metric-card wide">
+                <div class="metric-auc">
+                    <span class="auc-value">0.9999</span>
+                    <span class="auc-label">AUC-ROC</span>
+                </div>
+                <span class="metric-desc">Capacidad de discriminación entre clases</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPORTANCIA DE VARIABLES -->
+    <section id="variables" class="variables-section">
+        <div class="section-header">
+            <span class="section-tag">04 — Análisis del Modelo</span>
+            <h2 class="section-title">Variables más<br><span class="gradient-text">Determinantes</span></h2>
+        </div>
+        <div class="variables-chart" id="variables-chart">
+            <!-- Se llena dinámicamente desde JS -->
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">◈</span>
+                <span>SWAL Semiconductors</span>
+            </div>
+            <div class="footer-meta">
+                <p>Proyecto de Minería de Datos — NRC 83509</p>
+                <p>Corporación Universitaria Minuto de Dios (UNIMINUTO) — Mayo 2026</p>
+                <p class="footer-stack">
+                    Stack: Python 3.14 · FastAPI · pypmml · Random Forest (R) · HTML5 · CSS3 · JS
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/wafer.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

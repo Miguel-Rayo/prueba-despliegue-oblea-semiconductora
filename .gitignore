@@ -1,0 +1,212 @@
+# ============================================================
+# .gitignore — SWAL Semiconductors Web Service
+# ============================================================
+# Propósito: evitar que archivos generados, secretos, binarios
+# y dependencias pesadas contaminen el repositorio.
+#
+# PRINCIPIO DE SEGURIDAD:
+#   - Ignorar TODO lo que se puede regenerar (venv, caché, logs)
+#   - NUNCA ignorar código fuente, configuración ni assets estáticos
+#   - El modelo PMML se mantiene en el repo (16.7 MB < 100 MB límite GitHub)
+#     pero se documenta la opción de ignorarlo si se usa Git LFS.
+# ============================================================
+
+# ============================================================
+# 1. PYTHON — Entornos virtuales y caché
+# ============================================================
+
+# Entornos virtuales (¡NUNCA subir!)
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribución / build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# ============================================================
+# 2. PYTHON — Testing, cobertura y herramientas
+# ============================================================
+
+# pytest
+.pytest_cache/
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff / Black / isort
+.ruff_cache/
+
+# ============================================================
+# 3. JAVA / JVM (pypmml + JPype generan binarios nativos)
+# ============================================================
+
+*.class
+*.jar
+*.war
+*.ear
+*.jnilib
+*.dylib
+hs_err_pid*
+
+# ============================================================
+# 4. NODE / JS (por si se instala algo en el futuro)
+# ============================================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================================
+# 5. SECRETOS Y CONFIGURACIÓN LOCAL
+# ============================================================
+
+# Variables de entorno (NUNCA subir credenciales)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Archivos de secretos comunes
+secrets.json
+credentials.json
+*.pem
+*.key
+*.pfx
+*.p12
+
+# ============================================================
+# 6. LOGS Y DATOS TEMPORALES
+# ============================================================
+
+*.log
+logs/
+log/
+
+# Archivos temporales del backend
+backend/app/logs/*.log
+tmp/
+temp/
+*.tmp
+*.temp
+*.pid
+*.seed
+*.pid.lock
+
+# ============================================================
+# 7. SISTEMA OPERATIVO
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+
+# Linux
+*~
+.nfs*
+
+# ============================================================
+# 8. EDITORES E IDEs
+# ============================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+
+# ============================================================
+# 9. GIT Y CONTROL DE VERSIONES
+# ============================================================
+
+.git/
+.gitattributes
+*.orig
+*.rej
+
+# ============================================================
+# 10. ARCHIVOS BINARIOS GRANDES (opcional, documentado)
+# ============================================================
+# NOTA: El modelo PMML pesa ~16.7 MB y está bajo el límite de
+# 100 MB de GitHub. Si en el futuro se usan modelos más grandes
+# o se adopta Git LFS, descomentar la línea siguiente:
+#
+# *.pmml
+#
+# Por ahora se mantiene en el repo porque el backend lo necesita
+# para arrancar y no hay pipeline de CI/CD que lo genere.

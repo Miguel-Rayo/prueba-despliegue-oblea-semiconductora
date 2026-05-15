@@ -1,0 +1,16 @@
+[
+  {
+    "temperature_c_media": 450.4123,
+    "temperature_c_sd": 15.6314,
+    "pressure_torr_media": 758.3465,
+    "pressure_torr_sd": 31.5852,
+    "gas_flow_sccm_media": 120.0585,
+    "gas_flow_sccm_sd": 9.996,
+    "etch_rate_nm_min_media": 95.3956,
+    "etch_rate_nm_min_sd": 8.6068,
+    "voltage_v_media": 4.9955,
+    "voltage_v_sd": 0.3961,
+    "current_ma_media": 19.9927,
+    "current_ma_sd": 1.9928
+  }
+]

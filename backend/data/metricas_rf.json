@@ -1,0 +1,11 @@
+[
+  {
+    "modelo": "Random Forest",
+    "accuracy": 0.996,
+    "precision": 0.9901,
+    "sensibilidad": 0.998,
+    "f1_score": 0.994,
+    "mae": 0.004,
+    "auc": 0.9999
+  }
+]

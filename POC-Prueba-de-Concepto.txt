@@ -1,0 +1,172 @@
+Idea de como se podría hacer el backend.
+
+
+# api.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from pypmml import Model
+import json
+
+app = FastAPI(
+    title      = "API Predicción Obleas Semiconductoras",
+    description= "Predice si una oblea es defectuosa o normal",
+    version    = "1.0.0"
+)
+
+app.add_middleware(CORSMiddleware,
+    allow_origins  = ["*"],
+    allow_methods  = ["*"],
+    allow_headers  = ["*"]
+)
+
+# Cargar modelo y parámetros al iniciar
+modelo = Model.fromFile("modelo_random_forest.pmml")
+
+with open("params_normalizacion.json") as f:
+    params = json.load(f)
+
+# ============================================================
+# MODELO DE DATOS — lo que el frontend debe enviar
+# ============================================================
+
+class DatosOblea(BaseModel):
+    temperature_c:    float
+    pressure_torr:    float
+    gas_flow_sccm:    float
+    etch_rate_nm_min: float
+    voltage_v:        float
+    current_ma:       float
+    process_step:     str    # "CMP", "Deposition", "Etching",
+                             # "Lithography" o "Oxidation"
+
+    class Config:
+        # Ejemplo visible en Swagger UI
+        json_schema_extra = {
+            "example": {
+                "temperature_c":    460.5,
+                "pressure_torr":    690.0,
+                "gas_flow_sccm":    115.0,
+                "etch_rate_nm_min":  98.5,
+                "voltage_v":          5.1,
+                "current_ma":        20.3,
+                "process_step":   "Etching"
+            }
+        }
+
+# ============================================================
+# TRANSFORMACIÓN — misma que se hizo en R
+# ============================================================
+
+def transformar(datos: dict) -> dict:
+    vars_num = ["temperature_c", "pressure_torr", "gas_flow_sccm",
+                "etch_rate_nm_min", "voltage_v", "current_ma"]
+
+    # Z-score con parámetros del dataset original
+    datos_z = {}
+    for var in vars_num:
+        media = params[f"{var}_media"]
+        sd    = params[f"{var}_sd"]
+        datos_z[var] = (datos[var] - media) / sd
+
+    # One-hot encoding de process_step
+    etapas = ["CMP", "Deposition", "Etching", "Lithography", "Oxidation"]
+    for etapa in etapas:
+        datos_z[f"step_{etapa}"] = 1 if datos["process_step"] == etapa else 0
+
+    # Variables derivadas
+    datos_z["potencia_w"]    = datos_z["voltage_v"] * (datos_z["current_ma"] / 1000)
+    datos_z["anomaly_score"] = (abs(datos_z["temperature_c"]) +
+                                abs(datos_z["pressure_torr"])  +
+                                abs(datos_z["etch_rate_nm_min"]))
+    return datos_z
+
+# ============================================================
+# ENDPOINTS
+# ============================================================
+
+@app.get("/")
+def inicio():
+    return { "mensaje": "API Obleas Semiconductoras activa" }
+
+@app.get("/rangos")
+def rangos():
+    """Devuelve los rangos válidos de cada variable para el frontend"""
+    return {
+        "temperature_c":    { "min": 380, "max": 520, "unidad": "°C",     "tipico": 450 },
+        "pressure_torr":    { "min": 600, "max": 900, "unidad": "Torr",   "tipico": 760 },
+        "gas_flow_sccm":    { "min":  80, "max": 160, "unidad": "sccm",   "tipico": 115 },
+        "etch_rate_nm_min": { "min":  60, "max": 130, "unidad": "nm/min", "tipico":  95 },
+        "voltage_v":        { "min": 3.5, "max": 6.5, "unidad": "V",      "tipico": 5.0 },
+        "current_ma":       { "min":  12, "max":  28, "unidad": "mA",     "tipico": 20  },
+        "process_step":     { "opciones": ["CMP", "Deposition", "Etching",
+                                           "Lithography", "Oxidation"] }
+    }
+
+@app.post("/predecir")
+def predecir(oblea: DatosOblea):
+    """
+    Recibe parámetros reales de la oblea y predice si es defectuosa.
+    Aplica automáticamente z-score, one-hot encoding y variables derivadas.
+    """
+
+    # Transformar datos crudos
+    datos_transformados = transformar(oblea.dict())
+
+    # Predecir
+    resultado    = modelo.predict(datos_transformados)
+    prediccion   = resultado["predicted_defect_label"]
+    prob_def     = resultado.get("probability_Defectuosa", 0)
+    prob_nor     = resultado.get("probability_Normal",     0)
+
+    return {
+        "prediccion":       prediccion,
+        "es_defectuosa":    prediccion == "Defectuosa",
+        "probabilidad":     round(float(prob_def if prediccion == "Defectuosa"
+                                        else prob_nor), 4),
+        "prob_defectuosa":  round(float(prob_def), 4),
+        "prob_normal":      round(float(prob_nor), 4),
+        "z_scores": {
+            "pressure_torr":    round(datos_transformados["pressure_torr"],    3),
+            "temperature_c":    round(datos_transformados["temperature_c"],    3),
+            "etch_rate_nm_min": round(datos_transformados["etch_rate_nm_min"], 3),
+            "anomaly_score":    round(datos_transformados["anomaly_score"],    3)
+        }
+    }
+
+Api con fastAPI
+
+http://localhost:8000/docs       ← Swagger UI para probar visualmente
+http://localhost:8000/rangos     ← Ver rangos válidos de variables
+http://localhost:8000/predecir   ← Endpoint principal (POST)
+
+
+Estructura del resultado:
+
+{
+  "prediccion": "Defectuosa",
+  "es_defectuosa": true,
+  "probabilidad": 0.9823,
+  "prob_defectuosa": 0.9823,
+  "prob_normal": 0.0177,
+  "z_scores": {
+    "pressure_torr": -2.310,
+    "temperature_c":  1.370,
+    "etch_rate_nm_min": 1.390,
+    "anomaly_score": 5.070
+  }
+}
+
+Muestra del dataset usado para entrenar al modelo:
+
+temperature_c	pressure_torr	gas_flow_sccm	etch_rate_nm_min	voltage_v	current_ma	step_CMP	step_Deposition	step_Etching	step_Lithography	step_Oxidation	potencia_w	anomaly_score	defect_label
+4,50275E+14	-3,50141E+14	-6,84613E+14	-1,79271E+13	3,63053E+14	1,75165E+14	0	1	0	0	0	6359399885	9,79687E+14	Normal
+-1,59055E+14	-3,78307E+14	-3,1147E+14	-7,6313E+14	2,97456E+14	1,59771E+14	0	0	0	1	0	475248254,8	6,13675E+14	Normal
+5,95152E+14	-1,65317E+14	-6,03468E+14	1,38022E+14	-9,343E+14	-4,29025E+14	0	1	0	0	0	4,00838E+14	2,26213E+14	Normal
+1,43514E+14	-2,61172E+13	1,04612E+14	8,34143E+14	5,96609E+14	1,14195E+14	0	1	0	0	0	68129941,4	2,53045E+14	Normal
+-2,51071E+14	7,48401E+14	1,1918E+14	-7,40494E+14	-1,49327E+14	4,96281E+13	0	1	0	0	0	-7,41081E+14	1,73997E+14	Normal
+-2,51056E+14	-1,15793E+14	-7,77197E+14	-8,32634E+14	-6,49207E+14	-1,22937E+14	0	0	1	0	0	7981181298	2,24162E+14	Normal
+1,48905E+13	1,04821E+14	9,95368E+14	1,10347E+14	-2,00724E+14	4,24952E+14	0	0	0	1	0	-8,52983E+14	3,64073E+14	Normal
+
+
+

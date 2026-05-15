@@ -1,0 +1,98 @@
+/* ============================================================
+   BASE STYLES — Variables, Reset, Typography
+   ============================================================ */
+
+:root {
+    /* =========================================================
+       PALETA DE COLORES — PREMIUM DARK (ACLARADA)
+       Cambia estos valores para ajustar el tono general.
+       ========================================================= */
+    --bg-deep:        #0f1117;   /* Fondo general: gris-azulado oscuro (era #050508) */
+    --bg-panel:       #181b24;   /* Paneles: más luminoso (era #0a0a12) */
+    --bg-card:        #1e222d;   /* Tarjetas: claramente diferenciadas (era #0f0f1a) */
+    --bg-input:       #252a36;   /* Inputs: legibles sin esfuerzo (era #12121f) */
+
+    /* Acentos identidad (no cambiar salvo que quieras re-branding) */
+    --uv-chrome:      #9d4edd;
+    --uv-pastel:      #c77dff;
+    --neon-blue:      #00b4d8;
+    --neon-cyan:      #90e0ef;
+    --wafer-silver:   #e0e1dd;
+    --wafer-core:     #4cc9f0;
+    --alert-laser:    #ff0055;
+    --success:        #2ec4b6;
+
+    /* Tipografía: más blanco y legible */
+    --text-primary:   #ffffff;   /* Era #f8f9fa */
+    --text-secondary: #c8cdd6;   /* Era #adb5bd */
+    --text-muted:     #8a919d;   /* Era #6c757d */
+
+    /* Bordes: más definidos */
+    --border-subtle:  rgba(255,255,255,0.10);  /* Era 0.06 */
+    --border-glow:    rgba(0,180,216,0.3);
+    --radius-sm:      6px;
+    --radius-md:      12px;
+    --radius-lg:      20px;
+    --shadow-glow:    0 0 30px rgba(0,180,216,0.15);
+    --font-body:      'Inter', sans-serif;
+    --font-display:   'Space Grotesk', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--uv-chrome);
+    color: #fff;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--uv-chrome);
+    border-radius: 4px;
+}
+
+/* Utilidades tipográficas */
+.gradient-text {
+    background: linear-gradient(135deg, var(--neon-blue), var(--uv-pastel));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+a {
+    color: var(--neon-blue);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+a:hover {
+    color: var(--neon-cyan);
+}

@@ -1,0 +1,11 @@
+# Dependencias verificadas en Python 3.14.3
+# Nota: pydantic v1 se usa para evitar compilacion Rust (pydantic-core)
+# que requiere Visual C++ Build Tools en Windows.
+
+fastapi==0.104.1
+starlette==0.27.0
+anyio==3.7.1
+uvicorn==0.46.0
+pydantic==1.10.26
+pypmml==1.5.1
+python-multipart==0.0.28
